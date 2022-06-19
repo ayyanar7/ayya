@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/ayyanar7/reactprojects.git/static/css/main.d3617021.css",
+    "main.js": "/ayyanar7/reactprojects.git/static/js/main.287361ef.js",
+    "static/media/logo.jpg": "/ayyanar7/reactprojects.git/static/media/logo.54acf708459adda997a7.jpg",
+    "static/media/logo-min.svg": "/ayyanar7/reactprojects.git/static/media/logo-min.e48f112c6988b9c51b65fc52fad1f088.svg",
+    "index.html": "/ayyanar7/reactprojects.git/index.html",
+    "main.d3617021.css.map": "/ayyanar7/reactprojects.git/static/css/main.d3617021.css.map",
+    "main.287361ef.js.map": "/ayyanar7/reactprojects.git/static/js/main.287361ef.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d3617021.css",
+    "static/js/main.287361ef.js"
+  ]
+}
