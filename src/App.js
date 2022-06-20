@@ -17,7 +17,7 @@ import Search from './component/templates/Search';
  import ConfigurationSetup from './component/templates/Configuration/ConfigurationSetup'
  import Settings from './component/templates/Settings'
  import GlobalContextProvider from './component/utils/constants/GlobalContext'
-import Combx from './component/utils/ComboBox/Combx';
+//import Combx from './component/utils/ComboBox/Combx';
  function App() {
     
   return (
