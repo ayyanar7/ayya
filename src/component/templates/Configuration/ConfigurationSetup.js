@@ -11,17 +11,49 @@ let rows =  configdata.rows;
 console.log("getting rows: "+rows);
 let cols =  configdata.cols;
 console.log("getting cols: "+cols);
-let imagsformdata =  localStorage.getItem(DB_CONFIG_ITEM_IMG);
+let jsonimags =  localStorage.getItem(DB_CONFIG_ITEM_IMG);
+let imagsformdata = JSON.parse(jsonimags);
 console.log(imagsformdata);
-imagsformdata = JSON.parse(imagsformdata);
-console.log(imagsformdata);
-console.log(imagsformdata[0]+ ', '+ imagsformdata[1]);
-
+ 
 let imgsrc = null;
-for(var pair of imagsformdata.entries()) {
-  console.log(pair[0]+ ', '+ pair[1]);
-  imgsrc = URL.createObjectURL(pair[1]);
-}
+let temparray = null;
+let binaryData = null;
+//if(imagsformdata.key == 'jsonarry'){
+  console.log("------"+imagsformdata.value)
+  temparray =imagsformdata.value;
+  console.log("---***--"+temparray)
+ var size = Object.keys(rows).length;
+
+ rows.forEach(row => {
+  console.log("row[0] "+row[0])
+  var objprod = temparray.find(element => element.name === row[0]);
+  row.push(objprod.data);          
+  
+});
+
+  
+  temparray.forEach(element => {
+    console.log("---6666---"+element)
+    console.log("---7777---"+element.name)
+    console.log("---7777---"+element.data)
+
+    imgsrc = element.data;//Buffer.from(element)
+      
+  });
+ 
+//}
+//imagsformdata = JSON.parse(imagsformdata);
+//console.log(imagsformdata);
+//console.log(imagsformdata[0]+ ', '+ imagsformdata[1]);
+
+
+//URL.createObjectURL(binaryData);
+console.log(imgsrc);
+// let imgsrc = null;
+// for(var pair of imagsformdata.entries()) {
+//   console.log(pair[0]+ ', '+ pair[1]);
+//   imgsrc = URL.createObjectURL(binaryData);
+// }
  
 //imagsformdata.getItem(key);
     return (
@@ -36,8 +68,8 @@ for(var pair of imagsformdata.entries()) {
 
           return (<Card
           ctitle ={row[3] +' '+row[1]}
-          cimgsrc = {imgsrc}
-          cdesc = {row[9]}
+          cimgsrc = {row[10]}
+          cdesc = {row[8]+' '+row[9]} 
           cbtnservice = {row[2]}
           />
             );

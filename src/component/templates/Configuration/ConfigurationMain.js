@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ExcelOperation from '../../utils/FileOperations/ExcelOperation'
 import {  Col, Input, InputGroup,  FormGroup, Label, Button, Fade, FormFeedback, Container, Card } from 'reactstrap';
-import ImageResizer from '../../utils/FileOperations/ImageResizer';
+
 
   class ConfigurationMain extends Component {
   render() {
@@ -31,9 +31,7 @@ import ImageResizer from '../../utils/FileOperations/ImageResizer';
           </FormGroup>
 
           </Container>
-              <div>
-                <ImageResizer/>
-              </div>
+             
               <Container > 
               { <ExcelOperation/> }
                  </Container>

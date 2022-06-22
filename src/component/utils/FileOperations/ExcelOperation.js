@@ -4,8 +4,8 @@ import './ExcelOperation.css';
 import {OutTable, ExcelRenderer} from 'react-excel-renderer';
  import {  Col, Input, InputGroup,  FormGroup, Label, Button, Fade, FormFeedback, Container, Card } from 'reactstrap';
  import 'bootstrap/dist/css/bootstrap.min.css';
- import { DB_CONFIG_ITEM_DATA } from '../constants/Global'
-
+ import { DB_CONFIG_ITEM_DATA, DB_CONFIG_ITEM_IMG } from '../constants/Global'
+ import ImageResizer from '../../utils/FileOperations/ImageResizer';
 class ExcelOperation extends Component {
   constructor(props){
     super(props);
@@ -16,17 +16,19 @@ class ExcelOperation extends Component {
       rows: null,
       cols: null,
       uploadedFileName : ""
+      
      
     }
     this.fileHandler = this.fileHandler.bind(this);
     this.toggle = this.toggle.bind(this);
     this.openFileBrowser = this.openFileBrowser.bind(this);
-    this.renderFile = this.renderFile.bind(this);
-  
+    this.renderFile = this.renderFile.bind(this);  
     this.fileInput = React.createRef();
   }
 
   renderFile = (fileObj) => {
+    
+     let temArr = [];
       //just pass the fileObj as parameter
       ExcelRenderer(fileObj, (err, resp) => {
         if(err){
@@ -39,10 +41,24 @@ class ExcelOperation extends Component {
             rows: resp.rows
          
           });
+
+         resp.rows.forEach(row => {
+            let objimgData = {};
+            objimgData.name = row[0];
+            objimgData.data = '';            
+            temArr.push(objimgData);            
+            
+          });
+           
+let jsonim = {temArr};
+
           console.log("DB_CONFIG_ITEM_DATA : "+DB_CONFIG_ITEM_DATA);
           console.log("String resp: "+JSON.stringify(resp, null, 2));
            localStorage.setItem(DB_CONFIG_ITEM_DATA,JSON.stringify(resp, null, 2));
+           localStorage.setItem(DB_CONFIG_ITEM_IMG,JSON.stringify(jsonim, null, 2));
+
            console.log("getting resp: "+localStorage.getItem(DB_CONFIG_ITEM_DATA));
+           console.log("getting productid: "+localStorage.getItem(DB_CONFIG_ITEM_IMG));
 
           }
       }); 
@@ -115,8 +131,14 @@ class ExcelOperation extends Component {
             
               <OutTable data={this.state.rows} columns={this.state.cols} tableClassName="ExcelTable2007" tableHeaderRowClass="heading" />
               <div>
-                <div></div>
-          <Button color="info" style={{color: "white", zIndex: 0}}  > <NavLink to="/ConfigurationSetup"><i className="cui-file"></i> Proceed&hellip;</NavLink></Button>
+                <div> 
+                 Please note Images names must be same as the productID.
+                   </div>
+                <div>
+                <ImageResizer/>
+              </div>
+
+              <Button color="info" style={{color: "white", zIndex: 0}}  > <NavLink to="/ConfigurationSetup"><i className="cui-file"></i> Proceed&hellip;</NavLink></Button>
 
             </div> 
           </Container>  

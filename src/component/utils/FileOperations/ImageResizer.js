@@ -19,7 +19,7 @@ export  class ImageResizer extends Component{
        //const file = event.target.files[0];
        
        localStorage.getItem(DB_CONFIG_ITEM_IMG);
-        console.log('localStorage.getItem("resizedImage") '+ localStorage.getItem(DB_CONFIG_ITEM_IMG));
+        console.log('localStorage.getItem("DB_CONFIG_ITEM_IMG") '+ localStorage.getItem(DB_CONFIG_ITEM_IMG));
       //  const res = await fetch(
       //     Url,
       //    {
@@ -34,35 +34,104 @@ export  class ImageResizer extends Component{
       e.preventDefault()
        
      // var formData = new FormData();
-     const json = {};
-    
+     var jsonproductId = localStorage.getItem(DB_CONFIG_ITEM_IMG);
+     var productsdata= JSON.parse(jsonproductId);
+     var productids =  productsdata.temArr;
+     console.log("productids : "+productids)
+     console.log("this.state.imgCollection.size : "+this.state.imgCollection.size)
+     console.log("productids.size : "+productids.size)
+     if(this.state.imgCollection.length !== productids.length){
+      console.log("return void")
+
+       return;
+     }
+           var jsonArray = [];
        for (const key of Object.keys(this.state.imgCollection)) {
-        console.log('b4 resize: '+this.state.imgCollection[key].size);
+        console.log('b4 resize: '+this.state.imgCollection[key].name);
         let image = await resizeFile(this.state.imgCollection[key]);
         console.log('file: '+image);
-        
-        json[key]  = dataURIToBlob(image);
+        var obj = {};      
+        //let jsonimg  = dataURIToBlob(image);
+        const splitDataURI = image.split(",");
+  const byteString =
+    splitDataURI[0].indexOf("base64") >= 0
+      ? atob(splitDataURI[1])
+      : decodeURI(splitDataURI[1]);
+  const mimeString = splitDataURI[0].split(":")[1].split(";")[0];
+  const ia = new Uint8Array(byteString.length);
+  //to decode
+  
+  for (let i = 0; i < byteString.length; i++)
+   ia[i] = byteString.charCodeAt(i);
+   
+ var blobobj = new Blob([ia], { type: mimeString });
+ const reader = new FileReader();
+ let tempurl = window.URL.createObjectURL(blobobj);
+
+ console.log("productids[key] "+productids[key].name);
+ console.log("tempurl "+tempurl);
+ console.log("this.state.imgCollection[key].name "+this.state.imgCollection[key].name);
+  //  if(this.state.imgCollection[key].name.includes(productids[key].name)){
+  //    console.log("name match");
+  //    productids[key].data = tempurl;
+  //    jsonArray.push(productids);
+  //  }
+   
+  productids.forEach(product => {
+    console.log("product "+product.name);
+    if(this.state.imgCollection[key].name.includes(product.name)){
+      console.log("name match");
+     // product.data = tempurl;
+      product.data = tempurl;
+    console.log("objprod "+product);
+    jsonArray.push(product);  
+    }else{
+      console.log("not matched");
+    }
+  });
+
+   console.log("jsonArray "+jsonArray);
+ // This fires after the blob has been read/loaded.
+/**reader.addEventListener('loadend', (e) => {
+  const text = e.srcElement.result;
+  console.log("reader: "+text);
+  console.log("inside anaonymus fun: "+jsonArray)
+ //jsonArray.push(text);
+ console.log("inside anaonymus fun: "+jsonArray)
+ });
+
+// Start reading the blob as text.
+reader.readAsText(blobobj);
+**/
+// obj.value = blobobj;
+   //console.log('obj.value: '+obj.value); 
+       // obj.key = key;
+        //blob is converted and stored
+        //obj.value = image;//Array.from(new Uint8Array(jsonimg));
+        //jsonArray.push(obj);
         console.log('key: '+key);
-        console.log('After resize newFile: '+json[key] );
-        console.log('After resize newFile: '+json[key] .size);
+        //console.log('After resize newFile: '+jsonimg );
+        //console.log('After resize newFile: '+jsonimg.size);
           // formData.append(key, newFile);
           // console.log('formData: '+formData);
           //json[key] = newFile;
-         
+          //jsonArray.push(json);
        }
-       var jsonArray = [];
+  
      
-       jsonArray.push(json);
-       var jsonObject = {jsonArray}
-      let jsondata =JSON.stringify(jsonObject, null, '  ');
+       
+       var jsonObject = { }
+       jsonObject.key = 'jsonarray';
+       jsonObject.value = jsonArray;
+      let jsondata =JSON.stringify(jsonObject);
 
       
       // axios.post("http://localhost:4000/api/upload-images", formData, {
       // }).then(res => {
       //     console.log(res.data)
       // })
-
-      localStorage.setItem(DB_CONFIG_ITEM_IMG,JSON.stringify(jsondata));
+      console.log("Json: "+jsondata)
+      localStorage.setItem(DB_CONFIG_ITEM_IMG,jsondata);
   }
      render(){
      return (
